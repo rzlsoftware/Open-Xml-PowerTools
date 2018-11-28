@@ -284,6 +284,158 @@ namespace OpenXmlPowerTools
             }
         }
 
+        public static IEnumerable<WmlDocument> SplitOnSeperatorBookmarks(WmlDocument sourceDoc, string seperatorBookmarkPrefix)
+        {
+            using (var sourceStreamDocument = new OpenXmlMemoryStreamDocument(sourceDoc))
+            using (var sourceDocument = sourceStreamDocument.GetWordprocessingDocument())
+            {
+                return SplitOnSeperatorBookmarks(sourceDocument, seperatorBookmarkPrefix);
+            }
+        }
+
+        /// <summary>
+        /// Splits the specified document into several partial documents.
+        /// The partial documents are expected to be enclosed in bookmarks in the source document. Only bookmarks whose name starts
+        /// with the specified seperator prefix are used for splitting, other bookmarks are ignored. 
+        /// The closing bookmark is expected to be followed by a sectPr tag.
+        /// </summary>
+        public static IEnumerable<WmlDocument> SplitOnSeperatorBookmarks(WordprocessingDocument sourceDocument, string seperatorBookmarkPrefix)
+        {
+            var mainDocument = sourceDocument.MainDocumentPart.GetXDocument();
+
+            using (var initializedOutputStreamDocument = OpenXmlMemoryStreamDocument.CreateWordprocessingDocument())
+            using (var initializedOutputDocument = initializedOutputStreamDocument.GetWordprocessingDocument())
+            {
+                // BuildDocument() has to be called for internal initialization
+                BuildDocument(new List<Source>(), initializedOutputDocument);
+
+                List<ImageData> images = new List<ImageData>();
+                CopyStartingParts(sourceDocument, initializedOutputDocument, images);
+                foreach (var part in initializedOutputDocument.GetAllParts())
+                    if (part.Annotation<XDocument>() != null)
+                        part.PutXDocument();
+
+                var contentElements = mainDocument
+                                .Root
+                                .Element(W.body)
+                                .Elements()
+                                .ToList();
+
+                string currentDocumentSeparatorKey = null;
+                string currentBookmarkId = null;
+                bool isInPartialDocumentContext = false;
+                List<XElement> currentContents = null;
+
+                foreach (var element in contentElements)
+                {
+                    var seperatorBookmarkStart = element.DescendantsAndSelf(W.bookmarkStart).FirstOrDefault(x => x.Attribute(W.name).Value.StartsWith(seperatorBookmarkPrefix));
+                    if (seperatorBookmarkStart != null)
+                    {
+                        currentDocumentSeparatorKey = seperatorBookmarkStart.Attribute(W.name).Value.Substring(seperatorBookmarkPrefix.Length);
+
+                        // a document-seperator bookmark marks a new partial document
+                        currentBookmarkId = seperatorBookmarkStart.Attribute(W.id).Value;
+                        currentContents = new List<XElement> { element };
+
+                        isInPartialDocumentContext = true;
+                    }
+                    else if (element.DescendantsAndSelf(W.bookmarkEnd).FirstOrDefault(x => x.Attribute(W.id).Value == currentBookmarkId) != null)
+                    {
+                        // the bookmarkEnd element that match the previous bookmarkStart marks the end of and partial document
+                        currentContents.Add(element);
+
+                        isInPartialDocumentContext = false;
+                    }
+                    else if (isInPartialDocumentContext)
+                    {
+                        // everything between the bookmarkStart and bookmarkEnd elements should be added to the partial document
+                        currentContents.Add(element);
+                    }
+                    else if (currentContents != null)
+                    {
+                        // the sectionProperties following the bookmarkEnd should be added to the partial document
+                        // to ensure the correct header and footer being used
+                        var sectionProperties = element.DescendantsAndSelf(W.sectPr).FirstOrDefault();
+                        if (sectionProperties != null)
+                        {
+                            currentContents.Add(sectionProperties);
+
+                            using (var outputStream = new MemoryStream())
+                            using (var outputDocument = initializedOutputDocument.Clone(outputStream) as WordprocessingDocument)
+                            {
+                                CreatePartialDocument(sourceDocument, currentContents, outputDocument, new List<ImageData>(images));
+                                outputDocument.Close();
+
+                                yield return new WmlDocument(null, outputStream);
+                            }
+                        }
+                    }
+                }
+
+                initializedOutputDocument.Close();
+            }
+        }
+
+        private static void CreatePartialDocument(WordprocessingDocument sourceDocument, List<XElement> contents, WordprocessingDocument outputDocument, List<ImageData> images)
+        {
+            XDocument mainPart = outputDocument.MainDocumentPart.GetXDocument();
+            mainPart.Declaration.Standalone = "yes";
+            mainPart.Declaration.Encoding = "UTF-8";
+            mainPart.Root.ReplaceWith(
+                new XElement(W.document, NamespaceAttributes,
+                    new XElement(W.body)));
+
+            AppendDocument(sourceDocument, outputDocument, contents, true, null, images);
+
+            FixUpSectionProperties(outputDocument);
+
+            // Any sectPr elements that do not have headers and footers should take their headers and footers from the *next* section,
+            // i.e. from the running section.
+            var sections = mainPart.Descendants(W.sectPr).Reverse().ToList();
+
+            CachedHeaderFooter[] cachedHeaderFooter = new[]
+            {
+                new CachedHeaderFooter() { Ref = W.headerReference, Type = "first" },
+                new CachedHeaderFooter() { Ref = W.headerReference, Type = "even" },
+                new CachedHeaderFooter() { Ref = W.headerReference, Type = "default" },
+                new CachedHeaderFooter() { Ref = W.footerReference, Type = "first" },
+                new CachedHeaderFooter() { Ref = W.footerReference, Type = "even" },
+                new CachedHeaderFooter() { Ref = W.footerReference, Type = "default" },
+            };
+
+            bool firstSection = true;
+            foreach (var sect in sections)
+            {
+                if (firstSection)
+                {
+                    foreach (var hf in cachedHeaderFooter)
+                    {
+                        var referenceElement = sect.Elements(hf.Ref).FirstOrDefault(z => (string)z.Attribute(W.type) == hf.Type);
+                        if (referenceElement != null)
+                            hf.CachedPartRid = (string)referenceElement.Attribute(R.id);
+                    }
+                    firstSection = false;
+                    continue;
+                }
+                else
+                {
+                    CopyOrCacheHeaderOrFooter(outputDocument, cachedHeaderFooter, sect, W.headerReference, "first");
+                    CopyOrCacheHeaderOrFooter(outputDocument, cachedHeaderFooter, sect, W.headerReference, "even");
+                    CopyOrCacheHeaderOrFooter(outputDocument, cachedHeaderFooter, sect, W.headerReference, "default");
+                    CopyOrCacheHeaderOrFooter(outputDocument, cachedHeaderFooter, sect, W.footerReference, "first");
+                    CopyOrCacheHeaderOrFooter(outputDocument, cachedHeaderFooter, sect, W.footerReference, "even");
+                    CopyOrCacheHeaderOrFooter(outputDocument, cachedHeaderFooter, sect, W.footerReference, "default");
+                }
+
+            }
+
+            AdjustDocPrIds(outputDocument);
+
+            foreach (var part in outputDocument.GetAllParts())
+                if (part.Annotation<XDocument>() != null)
+                    part.PutXDocument();
+        }
+
         private static WmlDocument AdjustSectionBreak(WmlDocument doc)
         {
             using (OpenXmlMemoryStreamDocument streamDoc = new OpenXmlMemoryStreamDocument(doc))
