@@ -1,29 +1,5 @@
-﻿/***************************************************************************
-
-Copyright (c) Microsoft Corporation 2012-2015.
-
-This code is licensed using the Microsoft Public License (Ms-PL).  The text of the license can be found here:
-
-http://www.microsoft.com/resources/sharedsource/licensingbasics/publiclicense.mspx
-
-Published at http://OpenXmlDeveloper.org
-Resource Center and Documentation: http://openxmldeveloper.org/wiki/w/wiki/powertools-for-open-xml.aspx
-
-Developer: Eric White
-Blog: http://www.ericwhite.com
-Twitter: @EricWhiteDev
-Email: eric@ericwhite.com
-
-Version: 3.1.10
- * Add PtOpenXml.ListItemRun
-
-Version: 2.7.03
- * Enhancements to support RTL
-
-Version: 2.6.00
- * Enhancements to support HtmlConverter.cs
-
-***************************************************************************/
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using System.IO;
@@ -792,6 +768,9 @@ namespace OpenXmlPowerTools
                             if (ce.Elements().Count(e => e.Name != W.rPr) != 1)
                                 return dontConsolidate;
 
+                            if (ce.Attribute(PtOpenXml.AbstractNumId) != null)
+                                return dontConsolidate;
+
                             XElement rPr = ce.Element(W.rPr);
                             string rPrString = rPr != null ? rPr.ToString(SaveOptions.None) : string.Empty;
 
@@ -1215,6 +1194,8 @@ listSeparator
 
         private static Dictionary<XName, int> Order_rPr = new Dictionary<XName, int>
         {
+            { W.moveFrom, 5 },
+            { W.moveTo, 7 },
             { W.ins, 10 },
             { W.del, 20 },
             { W.rStyle, 30 },
@@ -4203,7 +4184,11 @@ listSeparator
         public static readonly XName _pic = pic + "pic";
         public static readonly XName spPr = pic + "spPr";
     }
-
+    public static class SVG
+    {
+        public static readonly XNamespace svg = "http://schemas.microsoft.com/office/drawing/2016/SVG/main";
+        public static readonly XName svgBlip = svg + "svgBlip";
+    }
     public static class Plegacy
     {
         public static readonly XNamespace plegacy = "urn:schemas-microsoft-com:office:powerpoint";
@@ -5849,6 +5834,8 @@ listSeparator
         public static XName FontName = pt + "FontName";
         public static XName LanguageType = pt + "LanguageType";
         public static XName AbstractNumId = pt + "AbstractNumId";
+        public static XName HtmlStructure = pt + "HtmlStructure";
+        public static XName HtmlStyle = pt + "HtmlStyle";
         public static XName StyleName = pt + "StyleName";
         public static XName TabWidth = pt + "TabWidth";
         public static XName Leader = pt + "Leader";
@@ -5868,6 +5855,13 @@ listSeparator
         public static readonly XName div = xhtml + "div";
         public static readonly XName h1 = xhtml + "h1";
         public static readonly XName h2 = xhtml + "h2";
+        public static readonly XName h3 = xhtml + "h3";
+        public static readonly XName h4 = xhtml + "h4";
+        public static readonly XName h5 = xhtml + "h5";
+        public static readonly XName h6 = xhtml + "h6";
+        public static readonly XName h7 = xhtml + "h7";
+        public static readonly XName h8 = xhtml + "h8";
+        public static readonly XName h9 = xhtml + "h9";
         public static readonly XName head = xhtml + "head";
         public static readonly XName html = xhtml + "html";
         public static readonly XName i = xhtml + "i";

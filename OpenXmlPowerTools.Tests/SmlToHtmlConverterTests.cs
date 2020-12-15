@@ -1,20 +1,5 @@
-﻿/***************************************************************************
-
-Copyright (c) Microsoft Corporation 2012-2015.
-
-This code is licensed using the Microsoft Public License (Ms-PL).  The text of the license can be found here:
-
-http://www.microsoft.com/resources/sharedsource/licensingbasics/publiclicense.mspx
-
-Published at http://OpenXmlDeveloper.org
-Resource Center and Documentation: http://openxmldeveloper.org/wiki/w/wiki/powertools-for-open-xml.aspx
-
-Developer: Eric White
-Blog: http://www.ericwhite.com
-Twitter: @EricWhiteDev
-Email: eric@ericwhite.com
-
-***************************************************************************/
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using System.Collections.Generic;
@@ -72,7 +57,8 @@ namespace OxPt
 
         public void SH005_ConvertSheet(string name, string sheetName)
         {
-            FileInfo sourceXlsx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name));
+            DirectoryInfo sourceDir = new DirectoryInfo("../../../../TestFiles/");
+            FileInfo sourceXlsx = new FileInfo(Path.Combine(sourceDir.FullName, name));
 
             var sourceCopiedToDestXlsx = new FileInfo(Path.Combine(TestUtil.TempDir.FullName, sourceXlsx.Name.Replace(".xlsx", "-1-Source.xlsx")));
             if (!sourceCopiedToDestXlsx.Exists)
@@ -130,7 +116,8 @@ namespace OxPt
         
         public void SH004_ConvertRange(string name, string sheetName, string range)
         {
-            FileInfo sourceXlsx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name));
+            DirectoryInfo sourceDir = new DirectoryInfo("../../../../TestFiles/");
+            FileInfo sourceXlsx = new FileInfo(Path.Combine(sourceDir.FullName, name));
 
             var sourceCopiedToDestXlsx = new FileInfo(Path.Combine(TestUtil.TempDir.FullName, sourceXlsx.Name.Replace(".xlsx", "-1-Source.xlsx")));
             if (!sourceCopiedToDestXlsx.Exists)
@@ -160,7 +147,8 @@ namespace OxPt
         
         public void SH003_ConvertTable(string name, string tableName)
         {
-            FileInfo sourceXlsx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name));
+            DirectoryInfo sourceDir = new DirectoryInfo("../../../../TestFiles/");
+            FileInfo sourceXlsx = new FileInfo(Path.Combine(sourceDir.FullName, name));
 
             var sourceCopiedToDestXlsx = new FileInfo(Path.Combine(TestUtil.TempDir.FullName, sourceXlsx.Name.Replace(".xlsx", "-1-Source.xlsx")));
             if (!sourceCopiedToDestXlsx.Exists)
@@ -179,7 +167,8 @@ namespace OxPt
         [InlineData("Spreadsheet.xlsx", 2)]
         public void SH002_SheetNames(string name, int numberOfSheets)
         {
-            FileInfo sourceXlsx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name));
+            DirectoryInfo sourceDir = new DirectoryInfo("../../../../TestFiles/");
+            FileInfo sourceXlsx = new FileInfo(Path.Combine(sourceDir.FullName, name));
             using (SpreadsheetDocument sDoc = SpreadsheetDocument.Open(sourceXlsx.FullName, true))
             {
                 var sheetNames = SmlDataRetriever.SheetNames(sDoc);
@@ -192,7 +181,8 @@ namespace OxPt
         [InlineData("SH002-TwoTablesTwoSheets.xlsx", 2)]
         public void SH001_TableNames(string name, int numberOfTables)
         {
-            FileInfo sourceXlsx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name));
+            DirectoryInfo sourceDir = new DirectoryInfo("../../../../TestFiles/");
+            FileInfo sourceXlsx = new FileInfo(Path.Combine(sourceDir.FullName, name));
             using (SpreadsheetDocument sDoc = SpreadsheetDocument.Open(sourceXlsx.FullName, true))
             {
                 var table = SmlDataRetriever.TableNames(sDoc);

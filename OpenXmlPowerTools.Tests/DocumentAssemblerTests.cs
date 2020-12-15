@@ -1,20 +1,5 @@
-﻿/***************************************************************************
-
-Copyright (c) Microsoft Corporation 2012-2015.
-
-This code is licensed using the Microsoft Public License (Ms-PL).  The text of the license can be found here:
-
-http://www.microsoft.com/resources/sharedsource/licensingbasics/publiclicense.mspx
-
-Published at http://OpenXmlDeveloper.org
-Resource Center and Documentation: http://openxmldeveloper.org/wiki/w/wiki/powertools-for-open-xml.aspx
-
-Developer: Eric White
-Blog: http://www.ericwhite.com
-Twitter: @EricWhiteDev
-Email: eric@ericwhite.com
-
-***************************************************************************/
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using System.Collections.Generic;
@@ -134,8 +119,9 @@ namespace OxPt
         
         public void DA101(string name, string data, bool err)
         {
-            FileInfo templateDocx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name));
-            FileInfo dataFile = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, data));
+            DirectoryInfo sourceDir = new DirectoryInfo("../../../../TestFiles/");
+            FileInfo templateDocx = new FileInfo(Path.Combine(sourceDir.FullName, name));
+            FileInfo dataFile = new FileInfo(Path.Combine(sourceDir.FullName, data));
 
             WmlDocument wmlTemplate = new WmlDocument(templateDocx.FullName);
             XElement xmldata = XElement.Load(dataFile.FullName);
@@ -189,8 +175,9 @@ namespace OxPt
         [InlineData("DA024-TrackedRevisions.docx", "DA-Data.xml")]
         public void DA102_Throws(string name, string data)
         {
-            FileInfo templateDocx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name));
-            FileInfo dataFile = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, data));
+            DirectoryInfo sourceDir = new DirectoryInfo("../../../../TestFiles/");
+            FileInfo templateDocx = new FileInfo(Path.Combine(sourceDir.FullName, name));
+            FileInfo dataFile = new FileInfo(Path.Combine(sourceDir.FullName, data));
 
             WmlDocument wmlTemplate = new WmlDocument(templateDocx.FullName);
             XElement xmldata = XElement.Load(dataFile.FullName);
@@ -207,8 +194,9 @@ namespace OxPt
         [InlineData("DA025-TemplateDocument.docx", "DA-Data.xml", false)]
         public void DA103_UseXmlDocument(string name, string data, bool err)
         {
-            FileInfo templateDocx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name));
-            FileInfo dataFile = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, data));
+            DirectoryInfo sourceDir = new DirectoryInfo("../../../../TestFiles/");
+            FileInfo templateDocx = new FileInfo(Path.Combine(sourceDir.FullName, name));
+            FileInfo dataFile = new FileInfo(Path.Combine(sourceDir.FullName, data));
 
             WmlDocument wmlTemplate = new WmlDocument(templateDocx.FullName);
             XmlDocument xmldata = new XmlDocument();

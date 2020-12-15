@@ -1,20 +1,5 @@
-﻿/***************************************************************************
-
-Copyright (c) Microsoft Corporation 2012-2015.
-
-This code is licensed using the Microsoft Public License (Ms-PL).  The text of the license can be found here:
-
-http://www.microsoft.com/resources/sharedsource/licensingbasics/publiclicense.mspx
-
-Published at http://OpenXmlDeveloper.org
-Resource Center and Documentation: http://openxmldeveloper.org/wiki/w/wiki/powertools-for-open-xml.aspx
-
-Developer: Eric White
-Blog: http://www.ericwhite.com
-Twitter: @EricWhiteDev
-Email: eric@ericwhite.com
-
-***************************************************************************/
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using System.Collections.Generic;
@@ -320,8 +305,9 @@ namespace OxPt
             string[] htmlFilter = null;
 #endif
 
-            var sourceHtmlFi = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name));
-            var sourceImageDi = new DirectoryInfo(Path.Combine(TestUtil.SourceDir.FullName, sourceHtmlFi.Name.Replace(".html", "_files")));
+            DirectoryInfo sourceDir = new DirectoryInfo("../../../../TestFiles/");
+            var sourceHtmlFi = new FileInfo(Path.Combine(sourceDir.FullName, name));
+            var sourceImageDi = new DirectoryInfo(Path.Combine(sourceDir.FullName, sourceHtmlFi.Name.Replace(".html", "_files")));
 
             var destImageDi = new DirectoryInfo(Path.Combine(TestUtil.TempDir.FullName, sourceImageDi.Name));
             var sourceCopiedToDestHtmlFi = new FileInfo(Path.Combine(TestUtil.TempDir.FullName, sourceHtmlFi.Name.Replace(".html", "-1-Source.html")));
@@ -406,8 +392,9 @@ namespace OxPt
         public void HW004(string name)
         {
 
-            var sourceHtmlFi = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name));
-            var sourceImageDi = new DirectoryInfo(Path.Combine(TestUtil.SourceDir.FullName, sourceHtmlFi.Name.Replace(".html", "_files")));
+            DirectoryInfo sourceDir = new DirectoryInfo("../../../../TestFiles/");
+            var sourceHtmlFi = new FileInfo(Path.Combine(sourceDir.FullName, name));
+            var sourceImageDi = new DirectoryInfo(Path.Combine(sourceDir.FullName, sourceHtmlFi.Name.Replace(".html", "_files")));
 
             var destImageDi = new DirectoryInfo(Path.Combine(TestUtil.TempDir.FullName, sourceImageDi.Name));
             var sourceCopiedToDestHtmlFi = new FileInfo(Path.Combine(TestUtil.TempDir.FullName, sourceHtmlFi.Name.Replace(".html", "-1-Source.html")));

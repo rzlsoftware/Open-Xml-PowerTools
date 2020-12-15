@@ -1,20 +1,5 @@
-﻿/***************************************************************************
-
-Copyright (c) Microsoft Corporation 2012-2015.
-
-This code is licensed using the Microsoft Public License (Ms-PL).  The text of the license can be found here:
-
-http://www.microsoft.com/resources/sharedsource/licensingbasics/publiclicense.mspx
-
-Published at http://OpenXmlDeveloper.org
-Resource Center and Documentation: http://openxmldeveloper.org/wiki/w/wiki/powertools-for-open-xml.aspx
-
-Developer: Eric White
-Blog: http://www.ericwhite.com
-Twitter: @EricWhiteDev
-Email: eric@ericwhite.com
-
-***************************************************************************/
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using System.Collections.Generic;
@@ -41,8 +26,9 @@ namespace OxPt
         {
             string name1 = "PB001-Input1.pptx";
             string name2 = "PB001-Input2.pptx";
-            FileInfo source1Pptx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name1));
-            FileInfo source2Pptx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name2));
+            DirectoryInfo sourceDir = new DirectoryInfo("../../../../TestFiles/");
+            FileInfo source1Pptx = new FileInfo(Path.Combine(sourceDir.FullName, name1));
+            FileInfo source2Pptx = new FileInfo(Path.Combine(sourceDir.FullName, name2));
 
             List<SlideSource> sources = null;
             sources = new List<SlideSource>()
@@ -58,7 +44,8 @@ namespace OxPt
         public void PB002_Formatting()
         {
             string name2 = "PB001-Input2.pptx";
-           FileInfo source2Pptx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name2));
+            DirectoryInfo sourceDir = new DirectoryInfo("../../../../TestFiles/");
+            FileInfo source2Pptx = new FileInfo(Path.Combine(sourceDir.FullName, name2));
 
             List<SlideSource> sources = null;
             sources = new List<SlideSource>()
@@ -74,8 +61,9 @@ namespace OxPt
         {
             string name1 = "PB001-Input1.pptx";
             string name2 = "PB001-Input3.pptx";
-            FileInfo source1Pptx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name1));
-            FileInfo source2Pptx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name2));
+            DirectoryInfo sourceDir = new DirectoryInfo("../../../../TestFiles/");
+            FileInfo source1Pptx = new FileInfo(Path.Combine(sourceDir.FullName, name1));
+            FileInfo source2Pptx = new FileInfo(Path.Combine(sourceDir.FullName, name2));
 
             List<SlideSource> sources = null;
             sources = new List<SlideSource>()
@@ -92,8 +80,9 @@ namespace OxPt
         {
             string name1 = "PB001-Input1.pptx";
             string name2 = "PB001-Input3.pptx";
-            FileInfo source1Pptx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name1));
-            FileInfo source2Pptx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name2));
+            DirectoryInfo sourceDir = new DirectoryInfo("../../../../TestFiles/");
+            FileInfo source1Pptx = new FileInfo(Path.Combine(sourceDir.FullName, name1));
+            FileInfo source2Pptx = new FileInfo(Path.Combine(sourceDir.FullName, name2));
 
             List<SlideSource> sources = null;
             sources = new List<SlideSource>()
@@ -110,8 +99,9 @@ namespace OxPt
         {
             string name1 = "PB001-Input1.pptx";
             string name2 = "PB001-Input3.pptx";
-            FileInfo source1Pptx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name1));
-            FileInfo source2Pptx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, name2));
+            DirectoryInfo sourceDir = new DirectoryInfo("../../../../TestFiles/");
+            FileInfo source1Pptx = new FileInfo(Path.Combine(sourceDir.FullName, name1));
+            FileInfo source2Pptx = new FileInfo(Path.Combine(sourceDir.FullName, name2));
 
             List<SlideSource> sources = null;
             sources = new List<SlideSource>()
@@ -132,7 +122,8 @@ namespace OxPt
         public void PB006_VideoFormats()
         {
             // This presentation contains videos with content types video/mp4, video/quicktime, video/unknown, video/x-ms-asf, and video/x-msvideo.
-            FileInfo sourcePptx = new FileInfo(Path.Combine(TestUtil.SourceDir.FullName, "PP006-Videos.pptx"));
+            DirectoryInfo sourceDir = new DirectoryInfo("../../../../TestFiles/");
+            FileInfo sourcePptx = new FileInfo(Path.Combine(sourceDir.FullName, "PP006-Videos.pptx"));
 
             var oldMediaDataContentTypes = GetMediaDataContentTypes(sourcePptx);
 

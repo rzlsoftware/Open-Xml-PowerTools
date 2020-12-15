@@ -1,8 +1,11 @@
-﻿[![Build status](https://ci.appveyor.com/api/projects/status/au9umdxcu7pnnacm?svg=true)](https://ci.appveyor.com/project/openxmlsdk/open-xml-powertools)
+﻿NuGet Feed for CI build: https://ci.appveyor.com/nuget/open-xml-powertools
 
-NuGet Feed for CI build: https://ci.appveyor.com/nuget/open-xml-powertools
+News
+====
+Welcome, Open-Xml-PowerTools users.  As you may have learned from the repo at OfficeDev/Open-Xml-PowerTools,
+Microsoft is going to archive that repo, and will not be maintaining that repo in the future.
 
-No NuGet.org feed at this time. We are working on it.
+Eric White
 
 Open-XML-PowerTools
 ===================
@@ -26,13 +29,14 @@ It supports scenarios such as:
 - Extracting data (along with formatting) from spreadsheets.
 
 Copyright (c) Microsoft Corporation 2012-2017
-Portions Copyright (c) Eric White 2016-2017
-Licensed under the Microsoft Public License.
-See License.txt in the project root for license information.
+Portions Copyright (c) Eric White Inc 2018-2019
+
+Licensed under the MIT License.
+See License in the project root for license information.
 
 News
 ====
-New Release!  Version 4.4.
+New Release!  Version 4.6.0
 
 This version has a completely re-written WmlComparer.cs, which now supports nested tables and text boxes.  WmlComparer.cs is a module that compares two DOCX files and
 produces a DOCX with revision tracking markup.  It enables retrieving a list of revisions.
@@ -43,12 +47,10 @@ Open-Xml-PowerTools Content
 There is a lot of content about Open-Xml-PowerTools at the [Open-Xml-PowerTools Resource Center at OpenXmlDeveloper.org](http://openxmldeveloper.org/wiki/w/wiki/powertools-for-open-xml.aspx)
 
 See:
-- [DocumentBuilder Resource Center](http://openxmldeveloper.org/wiki/w/wiki/documentbuilder.aspx)
-- [PresentationBuilder Resource Center](http://openxmldeveloper.org/wiki/w/wiki/presentationbuilder.aspx)
-- [HtmlConverter Resource Center](http://openxmldeveloper.org/wiki/w/wiki/htmlconverter.aspx)
-- [Introduction to DocumentAssembler](https://www.youtube.com/watch?v=9QqzCgfqA2Y)
-- [Contributing to Open-Xml-PowerTools via GitHub](https://www.youtube.com/watch?v=Ii7z9L6Dkko)
-- [Gitting, Building, and Installing Open-Xml-PowerTools](https://www.youtube.com/watch?v=60w-yPDSQD0)
+- [DocumentBuilder Resource Center](http://www.ericwhite.com/blog/documentbuilder-developer-center/)
+- [PresentationBuilder Resource Center](http://www.ericwhite.com/blog/presentationbuilder-developer-center/)
+- [WmlToHtmlConverter Resource Center](http://www.ericwhite.com/blog/wmltohtmlconverter-developer-center/)
+- [DocumentAssembler Resource Center](http://www.ericwhite.com/blog/documentassembler-developer-center/)
 
 Build Instructions
 ==================
@@ -72,6 +74,12 @@ With .NET CLI toolchain:
 
 Change Log
 ==========
+
+Version 4.6 : November 16, 2020
+- Various small bug fixes
+
+Version 4.5 : January 21, 2020
+- Various changes and fixes to DocumentBuilder
 
 Version 4.3 : June 13, 2016
 - New WmlComparer module
@@ -185,18 +193,4 @@ Version 3.1.00 : November 13, 2014
 Version 3.0.00 : October 29, 2014
 - New release of cmdlets that are written as 'Advanced Functions' instead of in C#.
 
-Procedures for enhancing Open-Xml-PowerTools
---------------------------------------------
-There are a variety of things to do when adding a new CmdLet to Open-Xml-PowerTools:
-- Write the new CmdLet.  Put it in the Cmdlets directory
-- Modify Open-Xml-PowerTools.psm1
-  - Call the new Cmdlet script to make the function available
-  - Modify Export-ModuleMember function to export the Cmdlet and any aliases
-- Update Readme.txt, describing the enhancement
-- Add a new test to Test-OpenXmlPowerToolsCmdlets.ps1
-
-Procedures for enhancing the core C# modules
-- Modify the code
-- Write xUnit tests
-- Write an example if necessary
-- Run xUnit tests
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information, see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
