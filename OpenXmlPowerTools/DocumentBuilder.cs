@@ -326,7 +326,7 @@ namespace OpenXmlPowerTools
             using (var initializedOutputDocument = initializedOutputStreamDocument.GetWordprocessingDocument())
             {
                 // BuildDocument() has to be called for internal initialization
-                BuildDocument(new List<Source>(), initializedOutputDocument);
+                BuildDocument(new List<Source>(), initializedOutputDocument, new DocumentBuilderSettings());
 
                 List<ImageData> images = new List<ImageData>();
                 CopyStartingParts(sourceDocument, initializedOutputDocument, images);
